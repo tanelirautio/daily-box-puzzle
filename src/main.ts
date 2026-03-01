@@ -88,6 +88,13 @@ let animationFrameId: number | null = null;
 let animationsEnabled = true;
 let currentMotion: RenderMotion | null = null;
 let stats: StatsStore = ensureDailyAttempt(loadStats(storage), dateKey);
+let dragState:
+  | {
+      pointerId: number;
+      lastX: number;
+      lastY: number;
+    }
+  | null = null;
 
 saveStats(storage, stats);
 
@@ -277,12 +284,13 @@ function animateTransition(previous: GameState, next: GameState) {
 
 function commitHistory(nextHistory: HistoryState) {
   if (nextHistory === history) {
-    return;
+    return false;
   }
 
   const previous = history.present;
   history = nextHistory;
   animateTransition(previous, history.present);
+  return true;
 }
 
 function runUndo() {
@@ -330,6 +338,119 @@ window.addEventListener('keydown', (event) => {
 
   event.preventDefault();
   commitHistory(applyHistoryMove(history, direction));
+});
+
+function getCanvasPoint(event: PointerEvent): Tile | null {
+  const rect = canvas.getBoundingClientRect();
+
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  ) {
+    return null;
+  }
+
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = Math.floor(((event.clientX - rect.left) * scaleX) / (canvas.width / history.present.width));
+  const y = Math.floor(((event.clientY - rect.top) * scaleY) / (canvas.height / history.present.height));
+
+  if (
+    x < 0 ||
+    y < 0 ||
+    x >= history.present.width ||
+    y >= history.present.height
+  ) {
+    return null;
+  }
+
+  return { x, y };
+}
+
+function getDragDirection(deltaX: number, deltaY: number, threshold: number): Direction | null {
+  if (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold) {
+    return null;
+  }
+
+  if (Math.abs(deltaX) >= Math.abs(deltaY)) {
+    return deltaX > 0 ? 'right' : 'left';
+  }
+
+  return deltaY > 0 ? 'down' : 'up';
+}
+
+canvas.addEventListener('pointerdown', (event) => {
+  if (event.pointerType === 'mouse' && event.button !== 0) {
+    return;
+  }
+
+  const point = getCanvasPoint(event);
+
+  if (
+    !point ||
+    point.x !== history.present.player.x ||
+    point.y !== history.present.player.y
+  ) {
+    return;
+  }
+
+  dragState = {
+    pointerId: event.pointerId,
+    lastX: event.clientX,
+    lastY: event.clientY,
+  };
+  canvas.setPointerCapture(event.pointerId);
+  event.preventDefault();
+});
+
+canvas.addEventListener('pointermove', (event) => {
+  if (!dragState || event.pointerId !== dragState.pointerId) {
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const tileWidth = rect.width / history.present.width;
+  const tileHeight = rect.height / history.present.height;
+  const threshold = Math.min(tileWidth, tileHeight) * 0.35;
+  const deltaX = event.clientX - dragState.lastX;
+  const deltaY = event.clientY - dragState.lastY;
+  const direction = getDragDirection(deltaX, deltaY, threshold);
+
+  if (!direction) {
+    return;
+  }
+
+  event.preventDefault();
+  const didMove = commitHistory(applyHistoryMove(history, direction));
+
+  dragState.lastX = event.clientX;
+  dragState.lastY = event.clientY;
+
+  if (!didMove) {
+    return;
+  }
+});
+
+function clearDrag(pointerId: number) {
+  if (!dragState || dragState.pointerId !== pointerId) {
+    return;
+  }
+
+  if (canvas.hasPointerCapture(pointerId)) {
+    canvas.releasePointerCapture(pointerId);
+  }
+
+  dragState = null;
+}
+
+canvas.addEventListener('pointerup', (event) => {
+  clearDrag(event.pointerId);
+});
+
+canvas.addEventListener('pointercancel', (event) => {
+  clearDrag(event.pointerId);
 });
 
 undoButton.addEventListener('click', () => {
