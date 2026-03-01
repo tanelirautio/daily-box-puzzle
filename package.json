@@ -1,0 +1,18 @@
+{
+  "name": "daily-box-puzzle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "prebuild": "node scripts/clean-dist.mjs",
+    "dev": "node scripts/vite-cli.mjs",
+    "build": "tsc -p tsconfig.build.json && node scripts/build-static.mjs",
+    "preview": "node scripts/preview-static.mjs",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  }
+}

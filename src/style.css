@@ -1,0 +1,354 @@
+:root {
+  color: #f3f1e8;
+  background: #111417;
+  font-family: Georgia, "Times New Roman", serif;
+  --page-bg: #111417;
+  --panel-bg: rgba(24, 29, 34, 0.9);
+  --panel-edge: rgba(240, 225, 200, 0.12);
+  --text-soft: #d0c7b5;
+  --text-muted: #a79e8c;
+  --accent: #d59b4a;
+  --accent-strong: #edb867;
+  --button-bg: rgba(213, 155, 74, 0.12);
+  --button-border: rgba(213, 155, 74, 0.4);
+  --button-hover: rgba(213, 155, 74, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(213, 155, 74, 0.18), transparent 32%),
+    radial-gradient(circle at 20% 20%, rgba(66, 107, 92, 0.12), transparent 28%),
+    linear-gradient(180deg, #1a2026 0%, var(--page-bg) 70%);
+}
+
+.app-shell {
+  display: grid;
+  gap: 1.25rem;
+  width: min(960px, 100%);
+  margin: 0 auto;
+  min-height: 100vh;
+  align-content: center;
+  padding: 1.5rem;
+}
+
+.hud-card,
+.help-panel,
+.overlay-card {
+  border: 1px solid var(--panel-edge);
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 24px 48px rgba(0, 0, 0, 0.28);
+}
+
+.hud-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 24px;
+}
+
+.hud {
+  display: grid;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.hud h1,
+.hud p {
+  margin: 0;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hud h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.hud p {
+  color: var(--text-soft);
+}
+
+.notice {
+  padding: 0.55rem 0.7rem;
+  border-radius: 14px;
+  background: rgba(213, 155, 74, 0.12);
+  border: 1px solid rgba(213, 155, 74, 0.24);
+  color: #f0d3a1;
+}
+
+#daily-meta,
+#countdown-text,
+#overlay-countdown,
+#overlay-stats {
+  color: var(--text-muted);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+button {
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--text-soft);
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  background: var(--button-hover);
+  border-color: rgba(237, 184, 103, 0.55);
+  color: #fff8ea;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:focus-visible {
+  outline: 2px solid rgba(237, 184, 103, 0.7);
+  outline-offset: 2px;
+}
+
+.board-panel {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+.board-shell {
+  position: relative;
+  border-radius: 28px;
+  padding: clamp(0.7rem, 2vw, 1rem);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+    rgba(14, 18, 23, 0.82);
+  border: 1px solid rgba(240, 225, 200, 0.1);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+.help-panel {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.help-panel h2,
+.help-panel p,
+.overlay-card h2,
+.overlay-card p {
+  margin: 0;
+}
+
+.help-panel h2,
+.overlay-card h2 {
+  font-size: 1.1rem;
+}
+
+.help-panel p {
+  color: var(--text-soft);
+}
+
+.about-card {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(240, 225, 200, 0.08);
+}
+
+.about-card h3,
+.about-card p {
+  margin: 0;
+}
+
+.about-card h3 {
+  font-size: 0.95rem;
+}
+
+.about-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(240, 225, 200, 0.08);
+  color: var(--text-soft);
+}
+
+.toggle-row button {
+  min-width: 4.5rem;
+  padding-inline: 0.9rem;
+}
+
+.solved-overlay {
+  position: absolute;
+  inset: clamp(0.7rem, 2vw, 1rem);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  border-radius: 22px;
+  background: rgba(8, 10, 14, 0.58);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.solved-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-card {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 280px;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.modal-shell {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(7, 10, 14, 0.58);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.modal-shell.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.stats-modal {
+  width: min(420px, 100%);
+  border-radius: 24px;
+  padding: 1rem;
+  border: 1px solid var(--panel-edge);
+  background: rgba(20, 24, 30, 0.96);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+.stats-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.stats-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(240, 225, 200, 0.08);
+}
+
+.stat-card span {
+  color: var(--text-muted);
+}
+
+.stat-card strong {
+  font-size: 1.45rem;
+}
+
+canvas {
+  display: block;
+  width: min(100%, 70vw, 480px);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 18px;
+  border: 1px solid rgba(240, 225, 200, 0.08);
+  background: #0f172a;
+  image-rendering: pixelated;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 18px 36px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 820px) {
+  .board-panel {
+    grid-template-columns: minmax(0, auto) minmax(220px, 280px);
+    justify-content: center;
+  }
+
+  .hud-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .hud {
+    text-align: left;
+  }
+
+  .toolbar {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    padding: 1rem;
+  }
+
+  button {
+    flex: 1 1 0;
+  }
+
+  .toolbar {
+    width: 100%;
+  }
+}

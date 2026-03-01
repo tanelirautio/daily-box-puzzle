@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Box Puzzle</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hud-card">
+        <section class="hud">
+          <p class="eyebrow">Daily Box Puzzle</p>
+          <h1>Daily Puzzle</h1>
+          <p id="daily-meta">Date: -- | Puzzle #--</p>
+          <p id="date-notice" class="notice" hidden></p>
+          <p id="status-text">Moves: 0 | Undo: 0</p>
+          <p id="countdown-text">Next puzzle in 00:00:00</p>
+        </section>
+        <section class="toolbar" aria-label="Puzzle actions">
+          <button id="undo-button" type="button">Undo</button>
+          <button id="redo-button" type="button">Redo</button>
+          <button id="restart-button" type="button">Restart</button>
+          <button id="stats-button" type="button">Stats</button>
+        </section>
+      </section>
+      <section class="board-panel">
+        <div class="board-shell">
+          <canvas
+            id="game"
+            width="384"
+            height="384"
+            aria-label="Puzzle board"
+          ></canvas>
+          <div id="solved-overlay" class="solved-overlay" aria-live="polite">
+            <div class="overlay-card">
+              <p class="eyebrow">Puzzle Solved</p>
+              <h2>Nice push sequence.</h2>
+              <p id="overlay-stats">Best: -- | Attempts: --</p>
+              <p id="overlay-countdown">Next puzzle in 00:00:00</p>
+              <button id="share-button" type="button">Copy share</button>
+            </div>
+          </div>
+        </div>
+        <aside class="help-panel" aria-label="Controls help">
+          <h2>Controls</h2>
+          <p>Move with Arrow keys or WASD.</p>
+          <p>Undo with Z or Backspace.</p>
+          <p>Redo with Y or Shift+Z.</p>
+          <p>Restart with R.</p>
+          <div class="toggle-row">
+            <span>Animations</span>
+            <button id="animation-toggle" type="button" aria-pressed="true">
+              On
+            </button>
+          </div>
+          <div class="about-card" aria-label="About">
+            <h3>About</h3>
+            <p>Built as a lightweight daily Sokoban-style puzzle.</p>
+            <p>Made with Vite, TypeScript, and the HTML canvas.</p>
+            <p>Code and art in this project are provided under the repository license.</p>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <div id="stats-modal" class="modal-shell" aria-hidden="true">
+      <section class="stats-modal" role="dialog" aria-modal="true" aria-labelledby="stats-title">
+        <div class="stats-header">
+          <div>
+            <p class="eyebrow">Your Progress</p>
+            <h2 id="stats-title">Stats</h2>
+          </div>
+          <button id="close-stats-button" type="button">Close</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span>Total Solved</span>
+            <strong id="stats-total-solved">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Current Streak</span>
+            <strong id="stats-current-streak">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Best Streak</span>
+            <strong id="stats-best-streak">0</strong>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
