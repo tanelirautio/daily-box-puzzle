@@ -93,6 +93,7 @@ let dragState:
       pointerId: number;
       lastX: number;
       lastY: number;
+      didMove: boolean;
     }
   | null = null;
 
@@ -394,6 +395,7 @@ canvas.addEventListener('pointerdown', (event) => {
     pointerId: event.pointerId,
     lastX: event.clientX,
     lastY: event.clientY,
+    didMove: false,
   };
   canvas.setPointerCapture(event.pointerId);
   event.preventDefault();
@@ -401,6 +403,10 @@ canvas.addEventListener('pointerdown', (event) => {
 
 canvas.addEventListener('pointermove', (event) => {
   if (!dragState || event.pointerId !== dragState.pointerId) {
+    return;
+  }
+
+  if (dragState.didMove) {
     return;
   }
 
@@ -419,8 +425,9 @@ canvas.addEventListener('pointermove', (event) => {
   event.preventDefault();
   const didMove = commitHistory(applyHistoryMove(history, direction));
 
-  dragState.lastX = event.clientX;
-  dragState.lastY = event.clientY;
+  if (didMove) {
+    dragState.didMove = true;
+  }
 
   if (!didMove) {
     return;
