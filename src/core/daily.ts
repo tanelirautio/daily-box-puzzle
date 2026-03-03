@@ -1,4 +1,5 @@
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function pad(value: number): string {
   return value.toString().padStart(2, '0');
@@ -72,14 +73,14 @@ export function hashDateKeyToIndex(
     throw new Error('packLength must be greater than 0.');
   }
 
-  let hash = 0x811c9dc5;
-
-  for (let index = 0; index < key.length; index += 1) {
-    hash ^= key.charCodeAt(index);
-    hash = Math.imul(hash, 0x01000193);
+  if (!isValidDateKey(key)) {
+    throw new Error(`Invalid date key "${key}".`);
   }
 
-  return (hash >>> 0) % packLength;
+  const [year, month, day] = key.split('-').map(Number);
+  const utcDayNumber = Math.floor(Date.UTC(year, month - 1, day) / MS_PER_DAY);
+
+  return utcDayNumber % packLength;
 }
 
 export function getTimeUntilLocalMidnight(now = new Date()): string {

@@ -386,13 +386,7 @@ canvas.addEventListener('pointerdown', (event) => {
     return;
   }
 
-  const point = getCanvasPoint(event);
-
-  if (
-    !point ||
-    point.x !== history.present.player.x ||
-    point.y !== history.present.player.y
-  ) {
+  if (!getCanvasPoint(event)) {
     return;
   }
 
